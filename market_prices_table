@@ -1,0 +1,158 @@
+USE agribusiness;
+
+MARKET PRICES 1
+
+CREATE TABLE market_prices(
+id int NOT NULL AUTO_INCREMENT,
+commodity VARCHAR(10),
+date DATE,
+open DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+high DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+low DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+close DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+PRIMARY KEY (id)
+);
+
+DESCRIBE market_prices;
+
+INSERT INTO market_prices (commodity, date, open, high, low, close)
+VALUES ('C00', '2012-01-03', '622', '664.25', '653', '658.5');
+
+TRUNCATE market_prices;
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/All/c00_12-22.csv'
+INTO TABLE market_prices
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/All/ct00_12-22.csv'
+INTO TABLE market_prices
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/All/s00_12-22.csv'
+INTO TABLE market_prices
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/All/w00_12-22.csv'
+INTO TABLE market_prices
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+select
+  distinct commodity,
+  max(high) as highest,
+  min(low) as lowest,
+  max(date),
+  min(date)
+from
+  market_prices
+group by
+  commodity
+order by
+  highest DESC;
+
+CREATE TABLE market_prices2(
+id int NOT NULL AUTO_INCREMENT,
+commodity VARCHAR(10),
+date DATE,
+close DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+open DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+high DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+low DECIMAL(10,2) DEFAULT '0.00' NOT NULL,
+volume INT DEFAULT '0',
+PRIMARY KEY (id)
+);
+
+DESCRIBE market_prices2;
+TRUNCATE market_prices2;
+SELECT * FROM market_prices2
+	WHERE commodity=CORN;
+SELECT MAX(id) FROM market_prices2;
+
+
+MARKET PRICES 2
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/Agribusiness_Data/Futures_2012-2022/summaries/WEAT_2011-2022.csv'
+INTO TABLE market_prices2
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/Agribusiness_Data/Futures_2012-2022/summaries/CORN_2010-2022.csv'
+INTO TABLE market_prices2
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xxDesktop/Agribusiness_Data/Futures_2012-2022/summaries/SOYB_2011-2022.csv'
+INTO TABLE market_prices2
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xxDesktop/Agribusiness_Data/Futures_2012-2022/summaries/TAGS_2012-2022.csv'
+INTO TABLE market_prices2
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/Agribusiness_Data/Futures_2012-2022/summaries/CANE_2011-2022.csv'
+INTO TABLE market_prices2
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA LOCAL INFILE  '/Users/xx/Desktop/Agribusiness_Data/Futures_2012-2022/summaries/BAL_2018-2022.csv'
+INTO TABLE market_prices2
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+select
+  distinct commodity,
+  max(high) as highest,
+  min(low) as lowest,
+  max(date),
+  min(date)
+from
+  market_prices2
+group by
+  commodity
+order by
+  highest DESC;
+
+select
+  distinct commodity, AVG((open+close)/2) AS average,
+  max(high) as highest,
+  min(low) as lowest,
+  max(date),
+  min(date)
+from
+  market_prices2
+group by
+  commodity
+order by
+  highest DESC;
+
+SELECT commodity, AVG((open+close)/2) AS average
+from
+  market_prices2
+group by
+  commodity;
+
